@@ -62,3 +62,13 @@ def success(request):
             }
         return render(request, 'success.html', context)
     return redirect('/')
+
+def email():
+    found = False
+    mysql = connectToMySQL('ajaxUsername_availability')        # connect to the database
+    query = "SELECT email from users WHERE users.email = %(user)s;"
+    data = { 'user': request.form['email'] }
+    result = mysql.query_db(query, data)
+    if result:
+        found = True
+    return render_template('partials/email.html', found=found)
