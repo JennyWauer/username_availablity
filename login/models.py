@@ -24,6 +24,18 @@ class UserManager(models.Manager):
             errors["password"] = "Your passwords do not match"
         return errors
 
+    def login_validator(self, postData):
+        login_errors = {}
+        login_pass = postData['login_pass']
+        login_email = postData['login_email']
+        if len(User.objects.filter(email=login_email)) < 0:
+            errors["login_email"] = "User email not found"
+        if len(User.objects.filter(email=login_email)) > 0:
+            user = User.objects.get(email=login_email)
+            if not user.password == login_pass:
+                errors["login_password"] = "Password does not match user email"
+        return login_errors
+
 class User(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
